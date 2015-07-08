@@ -13,7 +13,7 @@ Ball::~Ball(void)
 {
 }
 
-void Ball::tick(double dt, int* zFlag)
+void Ball::tick(double dt)
 {
 	s+=(v*dt);
 	
