@@ -1,11 +1,20 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+#define PI 3.14159265358979323846
+
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
 
 #define PADDLE_RADIUS 1.0
 #define BALL_RADIUS 1.0
+
+#define X_MIN -10.0
+#define X_MAX 10.0
+#define Y_MIN -10.0
+#define Y_MAX 10.0
+#define Z_MIN -20.0
+#define Z_MAX 20.0
 
 const float LIGHT_POSITION[] = {0.0f, 0.0f, 1.0f, 1.0f};
 const float LIGHT_DIFFUSE[] = {0.8f, 0.8f, 0.8f, 1.0f};
