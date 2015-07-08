@@ -35,7 +35,7 @@ GContext::~GContext(void)
 
 void GContext::initGL()
 {
-	glClearColor(0, 0, 0, 1);
+	glClearColor(COLOR_CLEAR[0], COLOR_CLEAR[1], COLOR_CLEAR[2], COLOR_CLEAR[3]);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -51,10 +51,10 @@ void GContext::initGL()
 	
 	glEnable(GL_COLOR_MATERIAL);
 
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE);
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT_SPECULAR);
-	//glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT_SPECULAR);
+	glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION);
 	
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, MAT_SHININESS);
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, MAT_WHITE);
@@ -83,6 +83,26 @@ void GContext::loopGL()
 
 void GContext::drawGL()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(30.0, aspectRatio, 0.1, 1000.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0.0, 0.0, -10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	
+	glPushMatrix();
+
+	glBegin(GL_TRIANGLES);
+	::glColor4fv(MAT_ELECTRIC);
+	glVertex3d(1.0, 1.0, -1.0);
+	::glColor4fv(MAT_MAGNETIC);
+	glVertex3d(0.0, 0.0, 0.0);
+	::glColor4fv(MAT_GRAVITATIONAL);
+	glVertex3d(0.0, 1.0, 1.0);
+	glEnd();
+
 	glFlush();
 }
 
