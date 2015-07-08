@@ -22,6 +22,24 @@ namespace scene
 {
 	Ball ball;
 	Paddle pad_a(PLAYER_ONE), pad_b(PLAYER_TWO);
+	
+	void tick(double dt)
+	{
+		ball.s+=(ball.v*dt);
+		
+		if(ball.s.getX()<=X_MIN+BALL_RADIUS | ball.s.getX()>=X_MAX-BALL_RADIUS)
+		{
+			ball.v.setX(-1.0*ball.v.getX());
+		}
+		if(ball.s.getY()<=Y_MIN+BALL_RADIUS | ball.s.getY()>=Y_MAX-BALL_RADIUS)
+		{
+			ball.v.setY(-1.0*ball.v.getY());
+		}
+		if(ball.s.getZ()<=Z_MIN+BALL_RADIUS | ball.s.getZ()>=Z_MAX-BALL_RADIUS)
+		{
+			ball.v.setZ(-1.0*ball.v.getZ());
+		}
+	}
 }
 
 inline void drawPaddle(GLUquadric* gluquad, Paddle& paddle)
@@ -78,11 +96,11 @@ void GContext::initGL()
 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT_SPECULAR);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT_SPECULAR);
 	glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION);
 	
-	//glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, MAT_SHININESS);
-	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, MAT_WHITE);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, MAT_SHININESS);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, MAT_WHITE);
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MAT_YELLOW);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MAT_BLACK);
 	
@@ -107,7 +125,7 @@ void GContext::loopGL()
 		window->display();
 		pollEvents();
 
-		scene::ball.tick(1.0/60.0);
+		scene::tick(1.0/60.0);
 	}
 }
 
@@ -118,22 +136,16 @@ void GContext::drawGL()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(30.0, aspectRatio, 0.1, 1000.0);
+	//gluPerspective(30.0, 16.0/9.0, 0.1, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(PLAYER_ONE_PERSPECTIVE);
 	glPushMatrix();
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glBegin(GL_QUADS);
-	for(int c=Z_MIN; c<=Z_MAX; c+=5)
-	{
-		glColor4d(1.0, 0.5, 0.0, 0.6);
-		glVertex3d(X_MIN, Y_MIN, c);
-		glVertex3d(X_MAX, Y_MIN, c);
-		glVertex3d(X_MAX, Y_MAX, c);
-		glVertex3d(X_MIN, Y_MAX, c);
-	}
-	glEnd();
+	
+	glColor4d(1.0, 0.5, 0.0, 0.6);
+
 	glBegin(GL_LINES);
 		glVertex3d(X_MIN, Y_MIN, Z_MIN);
 		glVertex3d(X_MIN, Y_MIN, Z_MAX);
@@ -143,6 +155,15 @@ void GContext::drawGL()
 		glVertex3d(X_MAX, Y_MAX, Z_MAX);
 		glVertex3d(X_MIN, Y_MAX, Z_MIN);
 		glVertex3d(X_MIN, Y_MAX, Z_MAX);
+	glEnd();
+	glBegin(GL_QUADS);
+	for(int c=Z_MIN; c<=Z_MAX; c+=5)
+	{
+		glVertex3d(X_MIN, Y_MIN, c);
+		glVertex3d(X_MIN, Y_MAX, c);
+		glVertex3d(X_MAX, Y_MAX, c);
+		glVertex3d(X_MAX, Y_MIN, c);
+	}
 	glEnd();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
