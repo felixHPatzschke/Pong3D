@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GContext.cpp" />
+    <ClCompile Include="GUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tensor.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -85,6 +86,7 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GContext.h" />
+    <ClInclude Include="GUtils.h" />
     <ClInclude Include="Tensor.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

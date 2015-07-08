@@ -90,17 +90,15 @@ void GContext::drawGL()
 	gluPerspective(30.0, aspectRatio, 0.1, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, -10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	gluLookAt(0.0, 0.0, -30.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 	
 	glPushMatrix();
 
-	glBegin(GL_TRIANGLES);
-	::glColor4fv(MAT_ELECTRIC);
-	glVertex3d(1.0, 1.0, -1.0);
-	::glColor4fv(MAT_MAGNETIC);
-	glVertex3d(0.0, 0.0, 0.0);
-	::glColor4fv(MAT_GRAVITATIONAL);
-	glVertex3d(0.0, 1.0, 1.0);
+	
+	glBegin(GL_QUADS);
+
+		
+	
 	glEnd();
 
 	glFlush();
@@ -108,12 +106,7 @@ void GContext::drawGL()
 
 void GContext::drawSFML()
 {
-	sf::CircleShape circle(120);
-	circle.setPosition(120,120);
-	circle.setFillColor(sf::Color(0,0,0,0));
-	circle.setOutlineColor(sf::Color(199, 221, 12, 128));
-	circle.setOutlineThickness(10);
-	window->draw(circle);
+	
 }
 
 void GContext::resizeGL(unsigned int width, unsigned int height)
