@@ -12,4 +12,6 @@ int main()
 	gc.initGL();
 	gc.loopGL();
 	gc.~GContext();
+
+	return EXIT_SUCCESS;
 }
