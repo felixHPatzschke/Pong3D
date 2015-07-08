@@ -12,6 +12,4 @@ int main()
 	gc.initGL();
 	gc.loopGL();
 	gc.~GContext();
-	
-	getchar();
 }
