@@ -125,19 +125,24 @@ void GContext::drawGL()
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBegin(GL_QUADS);
-
-		glColor4d(1.0, 0.5, 0.0, 0.2);
-		glVertex3d(X_MIN, Y_MIN, Z_MAX);
-		glVertex3d(X_MAX, Y_MIN, Z_MAX);
-		glVertex3d(X_MAX, Y_MAX, Z_MAX);
-		glVertex3d(X_MIN, Y_MAX, Z_MAX);
-	
-		glColor4d(0.0, 0.5, 1.0, 0.2);
+	for(int c=Z_MIN; c<=Z_MAX; c+=5)
+	{
+		glColor4d(1.0, 0.5, 0.0, 0.6);
+		glVertex3d(X_MIN, Y_MIN, c);
+		glVertex3d(X_MAX, Y_MIN, c);
+		glVertex3d(X_MAX, Y_MAX, c);
+		glVertex3d(X_MIN, Y_MAX, c);
+	}
+	glEnd();
+	glBegin(GL_LINES);
 		glVertex3d(X_MIN, Y_MIN, Z_MIN);
+		glVertex3d(X_MIN, Y_MIN, Z_MAX);
 		glVertex3d(X_MAX, Y_MIN, Z_MIN);
+		glVertex3d(X_MAX, Y_MIN, Z_MAX);
 		glVertex3d(X_MAX, Y_MAX, Z_MIN);
+		glVertex3d(X_MAX, Y_MAX, Z_MAX);
 		glVertex3d(X_MIN, Y_MAX, Z_MIN);
-	
+		glVertex3d(X_MIN, Y_MAX, Z_MAX);
 	glEnd();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
