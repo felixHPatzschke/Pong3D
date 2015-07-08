@@ -5,21 +5,23 @@
 
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
+#define PLAYER_ONE_PERSPECTIVE 0.0, 0.0, -60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+#define PLAYER_TWO_PERSPECTIVE 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
 
-#define PADDLE_RADIUS 1.0
-#define BALL_RADIUS 1.0
+#define PADDLE_RADIUS 3.0
+#define BALL_RADIUS 3.0
 
-#define X_MIN -10.0
-#define X_MAX 10.0
-#define Y_MIN -10.0
-#define Y_MAX 10.0
-#define Z_MIN -20.0
-#define Z_MAX 20.0
+#define X_MIN -16.0
+#define X_MAX 16.0
+#define Y_MIN -9.0
+#define Y_MAX 9.0
+#define Z_MIN -25.0
+#define Z_MAX 25.0
 
-const float LIGHT_POSITION[] = {0.0f, 0.0f, 1.0f, 1.0f};
+const float LIGHT_POSITION[] = {1.0f, 1.0f, 1.0f, 0.0f};
 const float LIGHT_DIFFUSE[] = {0.8f, 0.8f, 0.8f, 1.0f};
 const float LIGHT_AMBIENT[] = {0.1f, 0.1f, 0.1f, 1.0f};
-const float LIGHT_SPECULAR[] = {1.0f, 1.0f, 1.0f, 1.0f};
+const float LIGHT_SPECULAR[] = {0.6f, 0.6f, 0.6f, 1.0f};
 
 const float COLOR_CLEAR[] = {30.0f/255.0f, 30.0f/255.0f, 30.0f/255.0f, 1.0f};
 
