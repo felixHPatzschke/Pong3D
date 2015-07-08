@@ -3,8 +3,11 @@
 #include <SFML/OpenGL.hpp>
 #include <gl/GLU.h>
 #include <SFML/Graphics.hpp>
+#include "GUtils.h"
 #include "Constants.h"
 #include <iostream>
+#include "Ball.h"
+#include "Paddle.h"
 
 
 namespace mouse
@@ -15,6 +18,28 @@ namespace mouse
 GLUquadric* gluquad;
 double aspectRatio;
 
+namespace scene
+{
+	Ball ball;
+	Paddle pad_a(PLAYER_ONE), pad_b(PLAYER_TWO);
+}
+
+inline void drawPaddle(GLUquadric* gluquad, Paddle& paddle)
+{
+	glPushMatrix();
+	glTranslated(paddle.x, paddle.y, paddle.z);
+	gluDisk(gluquad, 0.0, PADDLE_RADIUS, SLICES, 1);
+	glPopMatrix();
+}
+
+inline void drawBall(GLUquadric* gluquad, Ball& ball)
+{
+	glPushMatrix();
+	glTranslatev(ball.s);
+	gluSphere(gluquad, BALL_RADIUS, SLICES, STACKS);
+	//glVector3d(ball.v);
+	glPopMatrix();
+}
 
 GContext::GContext(unsigned int width, unsigned int height, sf::Uint32 sm, sf::ContextSettings cs, unsigned int fps)
 {
@@ -81,6 +106,8 @@ void GContext::loopGL()
 		window->popGLStates();
 		window->display();
 		pollEvents();
+
+		scene::ball.tick(1.0/60.0);
 	}
 }
 
@@ -115,37 +142,26 @@ void GContext::drawGL()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
 	glColor4fv(::MAT_MAGNETIC);
-	gluSphere(gluquad, 1.0, 64, 64);
+	::drawBall(gluquad, scene::ball);
 
-	glPushMatrix();
-	glTranslated(0.0, 6.0, Z_MAX);
-	glColor4fv(::MAT_GRAVITATIONAL);
-	gluSphere(gluquad, 1.0, 64, 64);
-	glTranslated(4.0, -6.0, 0.0);
-	glColor4d(1.0, 0.0, 0.0, 0.375);
-	gluDisk(gluquad, 0.0, PADDLE_RADIUS, 24, 1);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(0.0, -6.0, Z_MIN);
-	glColor4fv(::MAT_ELECTRIC);
-	gluSphere(gluquad, 1.0, 64, 64);
-	glTranslated(-2.0, 6.0, 0.0);
-	glColor4d(0.0, 0.0, 1.0, 0.375);
-	gluDisk(gluquad, 0.0, PADDLE_RADIUS, 24, 1);
-	glPopMatrix();
-
+	glColor4f(103.0f/255.0f, 140.0f/255.0f, 177.0f/255.0f, 0.35f);
+	::drawPaddle(gluquad, scene::pad_b);
+	
+	glColor4d(210.0f/255.0f, 82.0f/255.0f, 82.0f/255.0f, 0.35f);
+	::drawPaddle(gluquad, scene::pad_a);
+	
+	
 	glFlush();
 }
 
 void GContext::drawSFML()
 {
-	sf::CircleShape circle(120);
-	circle.setPosition(120,120);
-	circle.setFillColor(sf::Color(0,0,0,0));
-	circle.setOutlineColor(sf::Color(199, 221, 12, 128));
-	circle.setOutlineThickness(10);
-	window->draw(circle);
+	//sf::CircleShape circle(120);
+	//circle.setPosition(120,120);
+	//circle.setFillColor(sf::Color(0,0,0,0));
+	//circle.setOutlineColor(sf::Color(199, 221, 12, 128));
+	//circle.setOutlineThickness(10);
+	//window->draw(circle);
 }
 
 void GContext::resizeGL(unsigned int width, unsigned int height)
@@ -177,6 +193,25 @@ void GContext::pollEvents()
 	{
 		running = false;
 	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		scene::pad_a.moveY(PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		scene::pad_a.moveY(-PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		scene::pad_a.moveX(PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		scene::pad_a.moveX(-PADDLE_SPEED);
 	
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		scene::pad_b.moveY(PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		scene::pad_b.moveY(-PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		scene::pad_b.moveX(PADDLE_SPEED);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		scene::pad_b.moveX(-PADDLE_SPEED);
+	
+
 }
 

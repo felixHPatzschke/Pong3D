@@ -31,22 +31,6 @@ Vector::~Vector()
 {}
 
 
-inline void Vector::setX(double d)
-{
-	comp[0]=d;
-}
-
-inline void Vector::setY(double d)
-{
-	comp[1]=d;
-}
-
-inline void Vector::setZ(double d)
-{
-	comp[2]=d;
-}
-
-
 inline double Vector::absSqr()const
 {
 	return (comp[0]*comp[0]+comp[1]*comp[1]+comp[2]*comp[2]);

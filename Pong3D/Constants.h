@@ -3,13 +3,17 @@
 
 #define PI 3.14159265358979323846
 
+#define STACKS 32
+#define SLICES 32
+
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
 #define PLAYER_ONE_PERSPECTIVE 0.0, 0.0, -60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
 #define PLAYER_TWO_PERSPECTIVE 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
 
 #define PADDLE_RADIUS 3.0
-#define BALL_RADIUS 3.0
+#define PADDLE_SPEED 0.3
+#define BALL_RADIUS 1.0
 
 #define X_MIN -16.0
 #define X_MAX 16.0

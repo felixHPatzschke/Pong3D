@@ -2,10 +2,12 @@
 class Paddle
 {
 public:
+	double x,y,z;
+
 	Paddle(int);
 	virtual ~Paddle();
 
-private:
-	double x,y,z;
+	void moveX(double);
+	void moveY(double);
 };
 

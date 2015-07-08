@@ -17,9 +17,9 @@ namespace phs
 		inline double getY()const{return comp[1];}
 		inline double getZ()const{return comp[2];}
 
-		inline void setX(double d);
-		inline void setY(double d);
-		inline void setZ(double d);
+		inline void setX(double d){comp[0]=d;}
+		inline void setY(double d){comp[1]=d;}
+		inline void setZ(double d){comp[2]=d;}
 
 		inline double absSqr()const;
 		inline double abs()const;
