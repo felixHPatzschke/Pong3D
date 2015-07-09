@@ -1,8 +1,13 @@
 #pragma once
+
+#include "Vector.h"
+
+using namespace phs;
+
 class Paddle
 {
 public:
-	double x,y,z;
+	Vector s;
 
 	Paddle(int);
 	virtual ~Paddle();

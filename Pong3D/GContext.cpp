@@ -35,9 +35,35 @@ namespace scene
 		{
 			ball.v.setY(-1.0*ball.v.getY());
 		}
-		if(ball.s.getZ()<=Z_MIN+BALL_RADIUS | ball.s.getZ()>=Z_MAX-BALL_RADIUS)
+		
+		if(ball.s.getZ()<=Z_MIN+BALL_RADIUS)
 		{
-			ball.v.setZ(-1.0*ball.v.getZ());
+			Vector diff = ball.s-pad_a.s;
+			diff.setZ(0.0);
+			if(diff.abs()<=PADDLE_RADIUS)
+			{
+				ball.v.setZ(-1.0*ball.v.getZ());
+				ball.v+=diff;
+			}else
+			{
+				ball.s.setZ(0.0);
+				std::cout << ball.v.debug("") << std::endl;
+			}
+		}
+
+		if(ball.s.getZ()>=Z_MAX+BALL_RADIUS)
+		{
+			Vector diff = ball.s-pad_b.s;
+			diff.setZ(0.0);
+			if(diff.abs()<=PADDLE_RADIUS)
+			{
+				ball.v.setZ(-1.0*ball.v.getZ());
+				ball.v+=diff;
+			}else
+			{
+				ball.s.setZ(0.0);
+				std::cout << ball.v.debug("") << std::endl;
+			}
 		}
 	}
 }
@@ -45,7 +71,7 @@ namespace scene
 inline void drawPaddle(GLUquadric* gluquad, Paddle& paddle)
 {
 	glPushMatrix();
-	glTranslated(paddle.x, paddle.y, paddle.z);
+	glTranslatev(paddle.s);
 	gluDisk(gluquad, 0.0, PADDLE_RADIUS, SLICES, 1);
 	glPopMatrix();
 }
@@ -78,7 +104,8 @@ GContext::~GContext(void)
 
 void GContext::initGL()
 {
-	glClearColor(COLOR_CLEAR[0], COLOR_CLEAR[1], COLOR_CLEAR[2], COLOR_CLEAR[3]);
+	//glClearColor(COLOR_CLEAR[0], COLOR_CLEAR[1], COLOR_CLEAR[2], COLOR_CLEAR[3]);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -145,7 +172,7 @@ void GContext::drawGL()
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	glColor4d(1.0, 0.5, 0.0, 0.6);
+	glColor4fv(::MAT_TRANSLATIONAL);
 
 	glBegin(GL_LINES);
 		glVertex3d(X_MIN, Y_MIN, Z_MIN);
