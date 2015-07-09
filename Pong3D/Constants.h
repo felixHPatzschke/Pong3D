@@ -22,14 +22,14 @@
 #define Z_MIN -25.0
 #define Z_MAX 25.0
 
-const float LIGHT_POSITION[] = {1.0f, 1.0f, 1.0f, 0.0f};
+const float LIGHT_POSITION[] = {0.0f, 10.0f, 0.0f, 1.0f};
 const float LIGHT_DIFFUSE[] = {0.8f, 0.8f, 0.8f, 1.0f};
 const float LIGHT_AMBIENT[] = {0.1f, 0.1f, 0.1f, 1.0f};
 const float LIGHT_SPECULAR[] = {0.6f, 0.6f, 0.6f, 1.0f};
 
 const float COLOR_CLEAR[] = {30.0f/255.0f, 30.0f/255.0f, 30.0f/255.0f, 1.0f};
 
-const float MAT_SHININESS[] = {100.0f};
+const float MAT_SHININESS[] = {128.0f};
 
 const float MAT_WHITE[] = {1.0f, 1.0f, 1.0f, 1.0f};
 const float MAT_BLACK[] = {0.0f, 0.0f, 0.0f, 1.0f};

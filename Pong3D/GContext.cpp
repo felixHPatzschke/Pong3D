@@ -140,6 +140,7 @@ void GContext::drawGL()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(PLAYER_ONE_PERSPECTIVE);
+	glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION);
 	glPushMatrix();
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -167,8 +168,10 @@ void GContext::drawGL()
 	glEnd();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
+	glEnable(GL_LIGHTING);
 	glColor4fv(::MAT_MAGNETIC);
 	::drawBall(gluquad, scene::ball);
+	glDisable(GL_LIGHTING);
 
 	glColor4f(103.0f/255.0f, 140.0f/255.0f, 177.0f/255.0f, 0.35f);
 	::drawPaddle(gluquad, scene::pad_b);
