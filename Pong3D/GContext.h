@@ -19,5 +19,6 @@ public:
 
 private:
 	bool running;
+	bool paused;
 };
 

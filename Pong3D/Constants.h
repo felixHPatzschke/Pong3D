@@ -8,12 +8,15 @@
 
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
-#define PLAYER_ONE_PERSPECTIVE 0.0, 0.0, -60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
-#define PLAYER_TWO_PERSPECTIVE 0.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+#define PLAYER_ONE_PERSPECTIVE 0.0, 0.0, -46.8, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+#define PLAYER_TWO_PERSPECTIVE 0.0, 0.0, 46.8, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
 
 #define PADDLE_RADIUS 3.0
 #define PADDLE_SPEED 0.3
 #define BALL_RADIUS 1.0
+#define DEFLECTION_FACTOR 2.2
+#define BALL_Z_SPEED 20.0
+#define BALL_MAX_SIDEWAYS_SPEED 24.0
 
 #define X_MIN -16.0
 #define X_MAX 16.0
@@ -21,6 +24,8 @@
 #define Y_MAX 9.0
 #define Z_MIN -25.0
 #define Z_MAX 25.0
+
+const unsigned int LIVES = 12;
 
 const float LIGHT_POSITION[] = {0.0f, 10.0f, 0.0f, 1.0f};
 const float LIGHT_DIFFUSE[] = {0.8f, 0.8f, 0.8f, 1.0f};

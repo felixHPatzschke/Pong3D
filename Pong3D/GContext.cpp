@@ -22,6 +22,7 @@ namespace scene
 {
 	Ball ball;
 	Paddle pad_a(PLAYER_ONE), pad_b(PLAYER_TWO);
+	unsigned int lives_a=LIVES, lives_b=LIVES;
 	
 	void tick(double dt)
 	{
@@ -30,10 +31,24 @@ namespace scene
 		if(ball.s.getX()<=X_MIN+BALL_RADIUS | ball.s.getX()>=X_MAX-BALL_RADIUS)
 		{
 			ball.v.setX(-1.0*ball.v.getX());
+			if(ball.s.getX()<=X_MIN+BALL_RADIUS)
+			{
+				ball.s.setX(X_MIN+BALL_RADIUS);
+			}else
+			{
+				ball.s.setX(X_MAX-BALL_RADIUS);
+			}
 		}
 		if(ball.s.getY()<=Y_MIN+BALL_RADIUS | ball.s.getY()>=Y_MAX-BALL_RADIUS)
 		{
 			ball.v.setY(-1.0*ball.v.getY());
+			if(ball.s.getY()<=Y_MIN+BALL_RADIUS)
+			{
+				ball.s.setY(Y_MIN+BALL_RADIUS);
+			}else
+			{
+				ball.s.setY(Y_MAX-BALL_RADIUS);
+			}
 		}
 		
 		if(ball.s.getZ()<=Z_MIN+BALL_RADIUS)
@@ -43,11 +58,31 @@ namespace scene
 			if(diff.abs()<=PADDLE_RADIUS)
 			{
 				ball.v.setZ(-1.0*ball.v.getZ());
-				ball.v+=diff;
+				ball.v+=diff*DEFLECTION_FACTOR;
+				if(ball.v.getX()>BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setX(BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getX()<-BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setX(-BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getY()>BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setY(BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getY()<-BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setY(-BALL_MAX_SIDEWAYS_SPEED);
+				}
 			}else
 			{
-				ball.s.setZ(0.0);
+				ball.s.setZ(Z_MAX-2);
 				std::cout << ball.v.debug("") << std::endl;
+				lives_a--;
+				std::cout << "Player A: ";
+				std::cout << lives_a << std::endl;
+				if(lives_a==0)
+				{
+					std::cout << "Player A has lost" << std::endl;
+				}
 			}
 		}
 
@@ -58,11 +93,31 @@ namespace scene
 			if(diff.abs()<=PADDLE_RADIUS)
 			{
 				ball.v.setZ(-1.0*ball.v.getZ());
-				ball.v+=diff;
+				ball.v+=diff*DEFLECTION_FACTOR;
+				if(ball.v.getX()>BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setX(BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getX()<-BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setX(-BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getY()>BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setY(BALL_MAX_SIDEWAYS_SPEED);
+				}else if(ball.v.getY()<-BALL_MAX_SIDEWAYS_SPEED)
+				{
+					ball.v.setY(-BALL_MAX_SIDEWAYS_SPEED);
+				}
 			}else
 			{
-				ball.s.setZ(0.0);
+				ball.s.setZ(Z_MIN+2);
 				std::cout << ball.v.debug("") << std::endl;
+				lives_b--;
+				std::cout << "Player B: ";
+				std::cout << lives_b << std::endl;
+				if(lives_b==0)
+				{
+					std::cout << "Player B has lost" << std::endl;
+				}
 			}
 		}
 	}
@@ -78,11 +133,19 @@ inline void drawPaddle(GLUquadric* gluquad, Paddle& paddle)
 
 inline void drawBall(GLUquadric* gluquad, Ball& ball)
 {
+	glEnable(GL_LIGHTING);
 	glPushMatrix();
 	glTranslatev(ball.s);
 	gluSphere(gluquad, BALL_RADIUS, SLICES, STACKS);
 	//glVector3d(ball.v);
 	glPopMatrix();
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POINTS);
+	//glVertex3d(ball.s.getX(), Y_MIN, ball.s.getZ());
+	glVertex3d(ball.s.getX(), Y_MAX, ball.s.getZ());
+	glVertex3d(X_MIN, ball.s.getY(), ball.s.getZ());
+	//glVertex3d(X_MAX, ball.s.getY(), ball.s.getZ());
+	glEnd();
 }
 
 GContext::GContext(unsigned int width, unsigned int height, sf::Uint32 sm, sf::ContextSettings cs, unsigned int fps)
@@ -93,6 +156,7 @@ GContext::GContext(unsigned int width, unsigned int height, sf::Uint32 sm, sf::C
 
 	aspectRatio = ((double)width)/((double)height);
 	running = true;
+	paused = false;
 	gluquad = gluNewQuadric();
 }
 
@@ -135,7 +199,7 @@ void GContext::initGL()
 	glEnable(GL_LIGHT1);
 
 	::glLineWidth(4.0);
-	//::glPointSize(2.0);
+	::glPointSize(12.0);
 
 	glEnable(GL_LIGHTING);
 
@@ -151,8 +215,9 @@ void GContext::loopGL()
 		window->popGLStates();
 		window->display();
 		pollEvents();
-
-		scene::tick(1.0/60.0);
+		
+		if(!paused)
+			scene::tick(1.0/60.0);
 	}
 }
 
@@ -162,7 +227,7 @@ void GContext::drawGL()
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(30.0, aspectRatio, 0.1, 1000.0);
+	gluPerspective(45.0, aspectRatio, 0.1, 1000.0);
 	//gluPerspective(30.0, 16.0/9.0, 0.1, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -195,10 +260,10 @@ void GContext::drawGL()
 	glEnd();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glColor4fv(::MAT_MAGNETIC);
 	::drawBall(gluquad, scene::ball);
-	glDisable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
 
 	glColor4f(103.0f/255.0f, 140.0f/255.0f, 177.0f/255.0f, 0.35f);
 	::drawPaddle(gluquad, scene::pad_b);
@@ -243,6 +308,21 @@ void GContext::pollEvents()
 		}else if(evt.type == sf::Event::Closed)
 		{
 			running = false;
+		}else if(evt.type == sf::Event::KeyReleased)
+		{
+			//std::cout << evt.key.code << std::endl;
+			if(evt.key.code == sf::Keyboard::Space)
+			{
+				//if(paused==false)
+				//{
+				//	paused = true;
+				//}else
+				//{
+				//	paused = false;
+				//}
+				//std::cout << paused << std::endl;
+				paused = !paused;
+			}
 		}
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
